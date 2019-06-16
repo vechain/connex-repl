@@ -58,6 +58,7 @@ if (baseUrl) {
 
 
 function setupREPL(server: REPL.REPLServer, obj: object) {
+    Object.assign(server.context, obj)
     if (server.terminal) {
         require('repl.history')(server, resolve(process.env.HOME!, '.connex-repl_history'))
     }
@@ -66,19 +67,6 @@ function setupREPL(server: REPL.REPLServer, obj: object) {
         process.exit(0)
     })
 
-    const globalNames = [
-        ...Object.getOwnPropertyNames(server.context),
-        ...Object.getOwnPropertyNames(global),
-        ...Object.getOwnPropertyNames(Object.prototype)
-    ]
-
-    const shouldSkipAutoCompletion = (s: string) => {
-        if (s.indexOf('.') < 0) {
-            return globalNames.indexOf(s) >= 0
-        }
-        return false
-    }
-
     // override completer
     const originalCompleter = server.completer;
     (server as any).completer = (line: string, callback: Function) => {
@@ -86,10 +74,12 @@ function setupREPL(server: REPL.REPLServer, obj: object) {
             if (err) {
                 return callback(err)
             }
-            callback(null, [out[0].filter(i => !shouldSkipAutoCompletion(i)), out[1]])
+            line = line.trim()
+            if (line) {
+                callback(null, out)
+            } else {
+                callback(null, [out[0].filter(i => obj.hasOwnProperty(i)), out[1]])
+            }
         })
     }
-
-    Object.assign(server.context, obj)
 }
-
