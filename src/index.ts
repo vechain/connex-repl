@@ -4,6 +4,7 @@ import { Framework } from '@vechain/connex-framework'
 import { DriverNodeJS } from '@vechain/connex.driver-nodejs'
 import * as REPL from 'repl'
 import { resolve } from 'path'
+import BigNumber from 'bignumber.js'
 
 process.on('unhandledRejection', reason => {
     //console.error('unhandled promise rejection', reason)
@@ -50,7 +51,9 @@ if (baseUrl) {
                     get gasPriceCoef() { return driver.txConfig.gasPriceCoef },
                     set gasPriceCoef(v) { driver.txConfig.gasPriceCoef = v }
                 },
-                txHistory
+                txHistory,
+                fromWei,
+                toWei
             })
 
             const ticker = connex.thor.ticker()
@@ -93,4 +96,13 @@ function setupREPL(server: REPL.REPLServer, obj: object) {
             }
         })
     }
+}
+
+const e18 = new BigNumber(1e18)
+function toWei(v: string | number) {
+    return new BigNumber(v).times(e18).toString(10)
+}
+
+function fromWei(v: string | number) {
+    return new BigNumber(v).div(e18).toString(10)
 }
