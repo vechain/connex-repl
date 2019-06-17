@@ -4,9 +4,10 @@ import { Framework } from '@vechain/connex-framework'
 import { DriverNodeJS } from '@vechain/connex.driver-nodejs'
 import * as REPL from 'repl'
 import { resolve } from 'path'
+import BigNumber from 'bignumber.js'
 
 process.on('unhandledRejection', reason => {
-    console.log(reason)
+    //console.error('unhandled promise rejection', reason)
 })
 
 const baseUrl = process.argv[2]
@@ -28,10 +29,14 @@ if (baseUrl) {
             const network = networks[connex.thor.genesis.id] || 'Custom'
             const prompter = {
                 get text() {
-                    const progressPercentage = connex.thor.status.progress * 100
-                    const progressStr = Number.isInteger(progressPercentage) ? progressPercentage.toString() : progressPercentage.toFixed(1)
+                    const progressStr = '' + Math.floor(connex.thor.status.progress * 1000) / 10
                     return `${network}(${progressStr}%)> `
                 }
+            }
+
+            const txHistory = [] as object[]
+            driver.txConfig.watcher = obj => {
+                txHistory.push(obj)
             }
 
             const server = REPL.start(prompter.text)
@@ -39,7 +44,16 @@ if (baseUrl) {
                 connex,
                 thor: connex.thor,
                 vendor: connex.vendor,
-                wallet: driver.wallet
+                wallet: driver.wallet,
+                txConfig: {
+                    get expiration() { return driver.txConfig.expiration },
+                    set expiration(v) { driver.txConfig.expiration = v },
+                    get gasPriceCoef() { return driver.txConfig.gasPriceCoef },
+                    set gasPriceCoef(v) { driver.txConfig.gasPriceCoef = v }
+                },
+                txHistory,
+                fromWei,
+                toWei
             })
 
             const ticker = connex.thor.ticker()
@@ -58,6 +72,7 @@ if (baseUrl) {
 
 
 function setupREPL(server: REPL.REPLServer, obj: object) {
+    Object.assign(server.context, obj)
     if (server.terminal) {
         require('repl.history')(server, resolve(process.env.HOME!, '.connex-repl_history'))
     }
@@ -66,19 +81,6 @@ function setupREPL(server: REPL.REPLServer, obj: object) {
         process.exit(0)
     })
 
-    const globalNames = [
-        ...Object.getOwnPropertyNames(server.context),
-        ...Object.getOwnPropertyNames(global),
-        ...Object.getOwnPropertyNames(Object.prototype)
-    ]
-
-    const shouldSkipAutoCompletion = (s: string) => {
-        if (s.indexOf('.') < 0) {
-            return globalNames.indexOf(s) >= 0
-        }
-        return false
-    }
-
     // override completer
     const originalCompleter = server.completer;
     (server as any).completer = (line: string, callback: Function) => {
@@ -86,10 +88,21 @@ function setupREPL(server: REPL.REPLServer, obj: object) {
             if (err) {
                 return callback(err)
             }
-            callback(null, [out[0].filter(i => !shouldSkipAutoCompletion(i)), out[1]])
+            line = line.trim()
+            if (line) {
+                callback(null, out)
+            } else {
+                callback(null, [out[0].filter(i => obj.hasOwnProperty(i)), out[1]])
+            }
         })
     }
-
-    Object.assign(server.context, obj)
 }
 
+const e18 = new BigNumber(1e18)
+function toWei(v: string | number) {
+    return new BigNumber(v).times(e18).toString(10)
+}
+
+function fromWei(v: string | number) {
+    return new BigNumber(v).div(e18).toString(10)
+}

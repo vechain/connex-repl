@@ -1,6 +1,6 @@
 {
   "name": "@vechain/connex-repl",
-  "version": "1.0.0-alpha-2",
+  "version": "1.0.0-alpha-3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,7 @@
   "license": "LGPL-3.0",
   "dependencies": {
     "@vechain/connex-framework": "^1.0.0-alpha-2",
-    "@vechain/connex.driver-nodejs": "^1.0.0-alpha-2",
+    "@vechain/connex.driver-nodejs": "^1.0.0-alpha-3",
     "repl.history": "^0.1.4"
   },
   "devDependencies": {
