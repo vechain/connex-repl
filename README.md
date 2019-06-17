@@ -27,9 +27,13 @@ Mainnet(100%)>
 ## Play with it
 
 * Check VeChain status
-    ```
+    ```bash
     > thor.status
     ```
 
-* TODO
+* Import private key
+    ```bash
+    > wallet.add('<private key>')
+    ```
 
+* TODO
