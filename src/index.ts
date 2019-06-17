@@ -6,7 +6,7 @@ import * as REPL from 'repl'
 import { resolve } from 'path'
 
 process.on('unhandledRejection', reason => {
-    console.log(reason)
+    //console.error('unhandled promise rejection', reason)
 })
 
 const baseUrl = process.argv[2]
@@ -28,10 +28,14 @@ if (baseUrl) {
             const network = networks[connex.thor.genesis.id] || 'Custom'
             const prompter = {
                 get text() {
-                    const progressPercentage = connex.thor.status.progress * 100
-                    const progressStr = Number.isInteger(progressPercentage) ? progressPercentage.toString() : progressPercentage.toFixed(1)
+                    const progressStr = '' + Math.floor(connex.thor.status.progress * 1000) / 10
                     return `${network}(${progressStr}%)> `
                 }
+            }
+
+            const txHistory = [] as object[]
+            driver.txConfig.watcher = obj => {
+                txHistory.push(obj)
             }
 
             const server = REPL.start(prompter.text)
@@ -39,7 +43,14 @@ if (baseUrl) {
                 connex,
                 thor: connex.thor,
                 vendor: connex.vendor,
-                wallet: driver.wallet
+                wallet: driver.wallet,
+                txConfig: {
+                    get expiration() { return driver.txConfig.expiration },
+                    set expiration(v) { driver.txConfig.expiration = v },
+                    get gasPriceCoef() { return driver.txConfig.gasPriceCoef },
+                    set gasPriceCoef(v) { driver.txConfig.gasPriceCoef = v }
+                },
+                txHistory
             })
 
             const ticker = connex.thor.ticker()
