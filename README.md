@@ -11,9 +11,14 @@ NodeJS version >= 10 is required.
 $ npm i -g @vechain/connex-repl
 ```
 
-Assume VeChain node running locally
+Startup to connect local thor API by default (http://localhost:8669/)
 ```bash
-$ connex http://localhost:8669
+$ connex 
+```
+
+or specify remote one
+```bash
+$ connex http://remote-thor-api-base-url
 ```
 
 Then you get a NodeJS REPL interface. e.g.
