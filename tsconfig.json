@@ -6,8 +6,7 @@
       "outDir": "./dist",
       "inlineSourceMap": true,
       "moduleResolution": "node",
-      "allowSyntheticDefaultImports": true,
-      "resolveJsonModule": true
+      "allowSyntheticDefaultImports": true
     },
     "include": [
       "./src"

@@ -5,6 +5,7 @@ import { DriverNodeJS } from '@vechain/connex.driver-nodejs'
 import * as REPL from 'repl'
 import { resolve } from 'path'
 import BigNumber from 'bignumber.js'
+const version = require('../package.json').version
 
 process.on('unhandledRejection', reason => {
     //console.error('unhandled promise rejection', reason)
@@ -18,7 +19,7 @@ const networks: { [index: string]: string } = {
     '0x00000000973ceb7f343a58b08f0693d6701a5fd354ff73d7058af3fba222aea4': 'Solo'
 }
 
-console.log(`VeChain Connex Playground @ ${baseUrl}`);
+console.log(`VeChain Connex Playground v${version} @ ${baseUrl}`);
 
 (async () => {
     try {

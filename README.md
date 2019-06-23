@@ -24,21 +24,21 @@ $ connex http://remote-thor-api-base-url
 Then you get a NodeJS REPL interface. e.g.
 
 ```bash
-VeChain Connex Playground
+VeChain Connex Playground @ http://localhost:8669/
 connex v1.2.3
-Mainnet(100%)>
+Testnet(100%)> 
 ```
 
 ## Play with it
 
 * Check VeChain status
     ```bash
-    > thor.status
+    Testnet(100%)> thor.status
     ```
 
 * Import private key
     ```bash
-    > wallet.add('<private key>')
+    Testnet(100%)> wallet.add('<private key>')
     ```
 
 * TODO
