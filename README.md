@@ -25,7 +25,7 @@ Then you get a NodeJS REPL interface. e.g.
 
 ```bash
 VeChain Connex Playground @ http://localhost:8669/
-connex v1.2.3
+connex v1.3.1
 Testnet(100%)> 
 ```
 
@@ -36,9 +36,13 @@ Testnet(100%)>
     Testnet(100%)> thor.status
     ```
 
+* Get newest block
+    ```bash
+    Testnet(100%)> await thor.block().get()
+    ```
 * Import private key
     ```bash
     Testnet(100%)> wallet.add('<private key>')
     ```
 
-* TODO
+TODO

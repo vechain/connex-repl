@@ -23,8 +23,8 @@ console.log(`VeChain Connex Playground v${version} @ ${baseUrl}`);
 
 (async () => {
     try {
-        const driver = await DriverNodeJS.connect(baseUrl)
-        const connex = new Framework(driver)
+        let driver = await DriverNodeJS.connect(baseUrl)
+        const connex = new Framework(Framework.guardDriver(driver))
         console.log(`connex v${connex.version}`)
 
         const network = networks[connex.thor.genesis.id] || 'Custom'
