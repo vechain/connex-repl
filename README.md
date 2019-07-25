@@ -42,7 +42,7 @@ Testnet(100%)>
     ```
 * Import private key
     ```bash
-    Testnet(100%)> wallet.add('<private key>')
+    Testnet(100%)> wallet.import('<private key>')
     ```
 
 TODO
