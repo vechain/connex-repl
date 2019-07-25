@@ -1,7 +1,7 @@
 #!/usr/bin/env node --experimental-repl-await
 
 import { Framework } from '@vechain/connex-framework'
-import { DriverNodeJS } from '@vechain/connex.driver-nodejs'
+import { Driver, SimpleWallet, SimpleNet } from '@vechain/connex.driver-nodejs'
 import * as REPL from 'repl'
 import { resolve } from 'path'
 import BigNumber from 'bignumber.js'
@@ -23,7 +23,8 @@ console.log(`VeChain Connex Playground v${version} @ ${baseUrl}`);
 
 (async () => {
     try {
-        let driver = await DriverNodeJS.connect(baseUrl)
+        const wallet = new SimpleWallet()
+        const driver = await Driver.connect(new SimpleNet(baseUrl), wallet)
         const connex = new Framework(Framework.guardDriver(driver))
         console.log(`connex v${connex.version}`)
 
@@ -36,8 +37,8 @@ console.log(`VeChain Connex Playground v${version} @ ${baseUrl}`);
         }
 
         const txHistory = [] as object[]
-        driver.txConfig.watcher = obj => {
-            txHistory.push(obj)
+        driver.onTxCommit = txObj => {
+            txHistory.push(txObj)
         }
 
         const server = REPL.start(prompter.text)
@@ -45,13 +46,12 @@ console.log(`VeChain Connex Playground v${version} @ ${baseUrl}`);
             connex,
             thor: connex.thor,
             vendor: connex.vendor,
-            wallet: driver.wallet,
-            txConfig: {
-                get expiration() { return driver.txConfig.expiration },
-                set expiration(v) { driver.txConfig.expiration = v },
-                get gasPriceCoef() { return driver.txConfig.gasPriceCoef },
-                set gasPriceCoef(v) { driver.txConfig.gasPriceCoef = v }
+            wallet: {
+                import(pk: string) { return wallet.import(pk) },
+                remove(addr: string) { return wallet.remove(addr) },
+                get list() { return wallet.list }
             },
+            txParams: driver.txParams,
             txHistory,
             fromWei,
             toWei

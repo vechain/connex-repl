@@ -1,6 +1,6 @@
 {
   "name": "@vechain/connex-repl",
-  "version": "1.0.0-beta-3",
+  "version": "1.0.0-beta-5",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -15,8 +15,8 @@
   "author": "qianbin",
   "license": "LGPL-3.0",
   "dependencies": {
-    "@vechain/connex-framework": "^1.0.0-beta-3",
-    "@vechain/connex.driver-nodejs": "^1.0.0-beta-3",
+    "@vechain/connex-framework": "^1.0.0-beta-5",
+    "@vechain/connex.driver-nodejs": "^1.0.0-beta-5",
     "bignumber.js": "^9.0.0",
     "repl.history": "^0.1.4"
   },
