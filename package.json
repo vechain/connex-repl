@@ -15,8 +15,8 @@
   "author": "qianbin",
   "license": "LGPL-3.0",
   "dependencies": {
-    "@vechain/connex-framework": "^1.0.0-beta-5",
-    "@vechain/connex.driver-nodejs": "^1.0.0-beta-5",
+    "@vechain/connex-framework": "^1.0.0-beta-7",
+    "@vechain/connex.driver-nodejs": "^1.0.0-beta-7",
     "bignumber.js": "^9.0.0",
     "repl.history": "^0.1.4"
   },
