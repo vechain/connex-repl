@@ -1,5 +1,7 @@
 # Connex REPL
 
+[![npm version](https://badge.fury.io/js/%40vechain%2Fconnex-repl.svg)](https://badge.fury.io/js/%40vechain%2Fconnex-repl)
+
 Connex REPL is the playground to interact with VeChain using Connex interface.
 
 
