@@ -41,7 +41,10 @@ console.log(`VeChain Connex Playground v${version} @ ${baseUrl}`);
             txHistory.push(txObj)
         }
 
-        const server = REPL.start(prompter.text)
+        const server = REPL.start({
+            prompt: prompter.text,
+            breakEvalOnSigint: true
+        })
         setupREPL(server, {
             connex,
             thor: connex.thor,
