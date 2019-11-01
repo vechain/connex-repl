@@ -43,7 +43,8 @@ console.log(`VeChain Connex Playground v${version} @ ${baseUrl}`);
 
         const server = REPL.start({
             prompt: prompter.text,
-            breakEvalOnSigint: true
+            breakEvalOnSigint: true,
+            useGlobal: true
         })
         setupREPL(server, {
             connex,
