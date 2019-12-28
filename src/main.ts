@@ -1,5 +1,3 @@
-#!/usr/bin/env node --experimental-repl-await
-
 import { Framework } from '@vechain/connex-framework'
 import { Driver, SimpleWallet, SimpleNet } from '@vechain/connex.driver-nodejs'
 import * as REPL from 'repl'

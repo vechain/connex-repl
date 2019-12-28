@@ -7,7 +7,7 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "build": "rm -rf dist/;tsc -p .",
+    "build": "rm -rf dist/;tsc -p .;cp src/index.js dist/",
     "lint": "tslint -p .",
     "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
